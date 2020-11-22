@@ -5,6 +5,7 @@ RUN apt update && apt install -y nano
 
 # Enable manager app, host manager app and docs apss
 RUN mv /usr/local/tomcat/webapps.dist/* /usr/local/tomcat/webapps
+RUN rm -rf /usr/local/tomcat/webapps.dist
 
 # Copying my tomcat-users.xml to the container
 # TO-BE-DONE user password as a docker build arg
