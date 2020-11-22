@@ -4,7 +4,7 @@ FROM tomcat:9.0.39-jdk11
 RUN apt update && apt install -y nano
 
 # Enable manager app, host manager app and docs apss
-RUN mv /usr/loca/tomcat/webapps.dist/* /usr/local/tomcat/webapps
+RUN mv /usr/local/tomcat/webapps.dist/* /usr/local/tomcat/webapps
 
 # Copying my tomcat-users.xml to the container
 # TO-BE-DONE user password as a docker build arg
