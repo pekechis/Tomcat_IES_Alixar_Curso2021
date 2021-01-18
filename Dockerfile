@@ -1,7 +1,7 @@
 FROM tomcat:9.0.39-jdk11
 
 # Installing basic tools
-RUN apt update && apt install -y nano && apt install -y  vim 
+RUN apt update && apt install -y nano && apt install -y  vim  && apt install -y openssh-server
 
 # Enable manager app, host manager app and docs apss
 RUN mv /usr/local/tomcat/webapps.dist/* /usr/local/tomcat/webapps
@@ -15,5 +15,19 @@ COPY mytomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
 COPY mycontext.xml /usr/local/tomcat/webapps/host-manager/META-INF/context.xml
 COPY mycontext.xml /usr/local/tomcat/webapps/manager/META-INF/context.xml
 
-# COPY THE APP
-COPY webapp.war /usr/local/tomcat/webapps/webapp.war
+# Creo el usuario para ejecutar los servicios
+RUN useradd -p $(openssl passwd -crypt '12345') usuario
+
+# Configuración del servicio ssh
+RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config
+
+# Copio el fichero del script al directorio /usr/bin
+COPY startservices.sh /usr/bin/startservices.sh
+
+# Le doy los permisos adecuados
+RUN chmod +x /usr/bin/startservices.sh
+
+# Ejecuto el CMD como usuario
+USER usuario
+
+CMD ["startservices.sh"]
